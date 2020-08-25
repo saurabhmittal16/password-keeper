@@ -25,3 +25,39 @@ exports.signup = (req, res) => {
         }
     );
 };
+
+exports.login = (req, res) => {
+    const { username, password } = req.body;
+
+    connection.query(
+        "SELECT * FROM users WHERE username=?",
+        [username],
+        (err, results) => {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.send({
+                    message: "some error occured",
+                });
+            } else if (results.length === 0) {
+                res.status(500);
+                res.send({
+                    message: "user not found",
+                });
+            } else {
+                const foundUser = results[0];
+                if (bcrypt.compareSync(password, foundUser.password)) {
+                    res.send({
+                        status: "success",
+                        userId: foundUser.id,
+                    });
+                } else {
+                    res.status(500);
+                    res.send({
+                        message: "incorrect password",
+                    });
+                }
+            }
+        }
+    );
+};
