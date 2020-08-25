@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const controller = require("./controller");
 
-const connection = require("./index");
-
-router.get("/auth", (req, res) => {
-    res.send("Auth route");
-});
+// create new user route
+router.post("/user", controller.signup);
 
 module.exports = router;
