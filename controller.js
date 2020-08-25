@@ -40,6 +40,7 @@ exports.login = (req, res) => {
             });
         } else {
             const foundUser = results[0];
+            // compare received password with stored hash
             if (bcrypt.compareSync(password, foundUser.password)) {
                 res.send({
                     status: "success",
@@ -67,6 +68,7 @@ exports.getPasswords = (req, res) => {
             });
         } else {
             results.map((item) => {
+                // for each password store, decrypt and send to user
                 item.password = decrypt(item.password);
                 return item;
             });
@@ -79,6 +81,7 @@ exports.addPassword = (req, res) => {
     const userId = parseInt(req.query.user);
     const { username, password, website } = req.body;
 
+    // encrypt the password before saving in the db
     const encryptedPassword = encrypt(password);
 
     connection.query(
