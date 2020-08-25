@@ -68,7 +68,7 @@ exports.getPasswords = (req, res) => {
             });
         } else {
             results.map((item) => {
-                // for each password store, decrypt and send to user
+                // for each password present, decrypt and send to user
                 item.password = decrypt(item.password);
                 return item;
             });
@@ -97,7 +97,7 @@ exports.addPassword = (req, res) => {
                 "INSERT INTO passwords (user_id, website, username, password) VALUES (?, ?, ?, ?)",
                 [userId, website, username, encryptedPassword],
                 (error) => {
-                    if (err) {
+                    if (error) {
                         console.log(error);
                         res.status(500);
                         res.send({
